@@ -2,8 +2,6 @@ if exists("b:current_syntax")
   finish
 endif
 
-let b:current_syntax = "moonbit"
-
 " Keywords (core MoonBit language keywords)
 syn keyword moonbitKeyword as else extern fn if let const match mut type struct enum trait derive while break continue import return try catch pub priv test loop for in impl guard async derive
 
@@ -16,9 +14,10 @@ syn keyword moonbitBoolean true false
 " Special identifiers
 syn keyword moonbitSpecial _ Self
 
-" Comments: // for single-line, /// for doc comments
-syn match moonbitComment "//.*$" contains=@Spell
-syn match moonbitDocComment /\/\/\/.*/ contains=@Spell
+" Comments: // for single-line, /// for doc comments, /* */ for block comments
+syn region moonbitDocComment start="///|" end="$" contains=@Spell
+syn region moonbitComment start="//" end="$" contains=@Spell
+syn region moonbitBlockComment start="/\*" end="\*/" contains=@Spell
 
 " Strings: "..." with escapes, also support raw strings
 syn region moonbitString start=+"+ skip=+\\\\\|\\\"+ end=+"+ contains=@Spell
@@ -36,20 +35,20 @@ syn match moonbitNumber /\<[0-9][0-9_]*[UuLl]\?\>/
 syn match moonbitFloat /\<[0-9][0-9_]*\.[0-9_]*\([eE][-+]\?[0-9_]\+\)\?\>/
 syn match moonbitFloat /\<[0-9][0-9_]*[eE][-+]\?[0-9_]\+\>/
 
-" Operators
-syn match moonbitOperator /->/
-syn match moonbitOperator /<-/
-syn match moonbitOperator /=>/
-syn match moonbitOperator /::/
-syn match moonbitOperator /\.\.\./
-syn match moonbitOperator /\.\./
-syn match moonbitOperator /==/
-syn match moonbitOperator /!=/
-syn match moonbitOperator />=/
-syn match moonbitOperator /<=/
-syn match moonbitOperator /&&/
-syn match moonbitOperator /\|\|/
-syn match moonbitOperator /[+\-*/%<>=!&|^~]/
+"" TODO Operators
+"syn match moonbitOperator /->/
+"syn match moonbitOperator /<-/
+"syn match moonbitOperator /=>/
+"syn match moonbitOperator /::/
+"syn match moonbitOperator /\.\.\./
+"syn match moonbitOperator /\.\./
+"syn match moonbitOperator /==/
+"syn match moonbitOperator /!=/
+"syn match moonbitOperator />=/
+"syn match moonbitOperator /<=/
+"syn match moonbitOperator /&&/
+"syn match moonbitOperator /\|\|/
+"syn match moonbitOperator /\<[+\-*/%<>=!&|^~]\>/
 
 " Delimiters (not highlighted specially, but contained)
 syn match moonbitDelimiter /[[\]{}(),;.]/
@@ -66,6 +65,7 @@ hi def link moonbitBoolean Boolean
 hi def link moonbitSpecial Special
 hi def link moonbitComment Comment
 hi def link moonbitDocComment SpecialComment
+hi def link moonbitBlockComment Comment
 hi def link moonbitString String
 hi def link moonbitRawString String
 hi def link moonbitCharacter Character
@@ -75,6 +75,4 @@ hi def link moonbitOperator Operator
 hi def link moonbitDelimiter Delimiter
 hi def link moonbitAttribute PreProc
 
-" Sync (for large files)
-syn sync minlines=200
-syn sync fromstart
+let b:current_syntax = "moonbit"
