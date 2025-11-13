@@ -1,4 +1,4 @@
 augroup moonbit_filetype
   au!
-  au BufRead,BufNewFile *.moonbit setfiletype moonbit
+  au BufRead,BufNewFile *.mbt setfiletype moonbit
 augroup END
